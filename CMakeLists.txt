@@ -74,7 +74,24 @@ endif()
 
 add_compile_options(-march=${ARCH} -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -std=gnu99)
 add_compile_options(-fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common)
-add_compile_options(--param highcode-gen-section-name=1)
+
+execute_process(
+  COMMAND ${CMAKE_C_COMPILER} --help=params
+  RESULT_VARIABLE COMPILER_HELP_RESULT
+  OUTPUT_VARIABLE COMPILER_HELP_OUTPUT
+  ERROR_QUIET
+)
+
+# Check if the CMAKE_C_COMPILER supports the highcode-gen-section-name parameter
+# Check if the help output contains the highcode-gen-section-name parameter
+if ("${COMPILER_HELP_OUTPUT}" MATCHES "highcode-gen-section-name")
+  # Add compile options if the parameter is supported
+  add_compile_options(--param highcode-gen-section-name=1)
+  message(STATUS "Adding highcode-gen-section-name param to compile options")
+else()
+  message(STATUS "The highcode-gen-section-name parameter is not supported by the C compiler.")
+endif()
+
 add_compile_options(-Wall -Wno-comment -Wno-enum-compare -Wno-unused-but-set-variable)
 add_compile_options(-fdiagnostics-color=always)
 
