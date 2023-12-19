@@ -65,7 +65,14 @@ project(qmk_port_ch582 C CXX ASM)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_STANDARD 99)
 
-add_compile_options(-march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -std=gnu99)
+if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL "12.1")
+  set(ARCH "rv32imac_zicsr")
+  message(STATUS "GNUCC compiler is ${CMAKE_C_COMPILER_VERSION}, ARCH set to ${ARCH}")
+else()
+  set(ARCH "rv32imac")
+endif()
+
+add_compile_options(-march=${ARCH} -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -std=gnu99)
 add_compile_options(-fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common)
 add_compile_options(--param highcode-gen-section-name=1)
 add_compile_options(-Wall -Wno-comment -Wno-enum-compare -Wno-unused-but-set-variable)
@@ -249,7 +256,7 @@ else()
     target_link_libraries(${keyboard}_IAP.elf PUBLIC mcuboot_porting)
 
     target_link_options(${keyboard}.elf PRIVATE
-        -march=rv32imac -mabi=ilp32
+        -march=${ARCH} -mabi=ilp32
         -nostartfiles
         -Xlinker --gc-sections
         -Wl,--print-memory-usage
@@ -258,7 +265,7 @@ else()
         --specs=nosys.specs
     )
     target_link_options(${keyboard}_IAP.elf PRIVATE
-        -march=rv32imac -mabi=ilp32
+        -march=${ARCH} -mabi=ilp32
         -nostartfiles
         -Xlinker --gc-sections
         -Wl,--print-memory-usage
