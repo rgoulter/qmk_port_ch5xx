@@ -1,6 +1,7 @@
 [submodule "qmk_firmware"]
 	path = qmk_firmware
-	url = https://github.com/qmk/qmk_firmware.git
+	url = https://github.com/rgoulter/qmk_firmware.git
+	branch = .
 [submodule "CherryUSB"]
 	path = CherryUSB
 	url = https://github.com/sakumisu/CherryUSB.git
