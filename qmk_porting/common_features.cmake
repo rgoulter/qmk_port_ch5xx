@@ -120,6 +120,34 @@ if(TAP_DANCE_ENABLE)
     )
 endif()
 
+# COMBO_ENABLE
+if(COMBO_ENABLE)
+    add_definitions(-DCOMBO_ENABLE)
+    message(STATUS "COMBO_ENABLE")
+    list(APPEND quantum_SOURCES
+        "${QMK_BASE_DIR}/quantum/process_keycode/process_combo.c"
+    )
+endif()
+
+# LEADER_ENABLE
+if(LEADER_ENABLE)
+    add_definitions(-DLEADER_ENABLE)
+    message(STATUS "LEADER_ENABLE")
+    list(APPEND quantum_SOURCES
+        "${QMK_BASE_DIR}/quantum/leader.c"
+        "${QMK_BASE_DIR}/quantum/process_keycode/process_leader.c"
+    )
+endif()
+
+# DYNAMIC_MACRO_ENABLE
+if(DYNAMIC_MACRO_ENABLE)
+    add_definitions(-DDYNAMIC_MACRO_ENABLE)
+    message(STATUS "DYNAMIC_MACRO_ENABLE")
+    list(APPEND quantum_SOURCES
+        "${QMK_BASE_DIR}/quantum/process_keycode/process_dynamic_macro.c"
+    )
+endif()
+
 # VIA_ENABLE
 if(VIA_ENABLE)
     add_definitions(-DVIA_ENABLE -DRAW_ENABLE -DDYNAMIC_KEYMAP_ENABLE)
